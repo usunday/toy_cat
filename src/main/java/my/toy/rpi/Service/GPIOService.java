@@ -16,8 +16,6 @@ import com.pi4j.wiringpi.SoftPwm;
 @Service
 public class GPIOService {
 	Logger log = Logger.getLogger(GPIOService.class);
-	// 재생할 파일이름과 확장자
-	private final String FILE_NAME = "Beat.wav";
 	
 	public void init(int pinCnt) throws InterruptedException {
 		// initialize wiringPi library
@@ -27,27 +25,9 @@ public class GPIOService {
 //        SoftPwm.softPwmCreate(2, 0, 100);
         for(int i=0; i<pinCnt; i++){
         	SoftPwm.softPwmCreate(i, 0, 100);
-
-//        	for (int j = 0; j <= 100; j++) {
-//              SoftPwm.softPwmWrite(i, j);
-//              Thread.sleep(10);
-//        	}
         }
-//            // fade Servo to fully ON
-//            for (int i = 0; i <= 100; i++) {
-//                SoftPwm.softPwmWrite(1, i);
-//                SoftPwm.softPwmWrite(2, i);
-//                Thread.sleep(10);
-//            }
-//
-//            // fade Servo to fully OFF
-//            for (int i = 100; i >= 0; i--) {
-//                SoftPwm.softPwmWrite(1, i);
-//                SoftPwm.softPwmWrite(2, i);
-//                Thread.sleep(10);
-//            }
-        
 	}
+	@Async
 	public void pinUp(int num) throws InterruptedException {
 		// TODO Auto-generated method stub
            
@@ -57,7 +37,7 @@ public class GPIOService {
             Thread.sleep(10);
         }
 	}
-
+	@Async
 	public void pinDown(int num) throws InterruptedException {
 		// TODO Auto-generated method stub
 		// fade LED to fully OFF
