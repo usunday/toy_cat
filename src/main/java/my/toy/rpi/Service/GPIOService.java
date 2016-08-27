@@ -25,8 +25,6 @@ public class GPIOService {
 		// initialize wiringPi library
         com.pi4j.wiringpi.Gpio.wiringPiSetup();
         // create soft-pwm pins (min=0 ; max=100)
-//        SoftPwm.softPwmCreate(1, 0, 100);
-//        SoftPwm.softPwmCreate(2, 0, 100);
         for(int i=0; i<pinCnt; i++){
         	SoftPwm.softPwmCreate(i, 0, 100);
         }
@@ -61,14 +59,14 @@ public class GPIOService {
 	 * @return
 	 */
 	public File getWaveFile(String fileName){
-		ClassPathResource classPathResource = null;
+//		ClassPathResource classPathResource = null;
 		File file = null;
-		InputStream inputStream = null;
+//		InputStream inputStream = null;
 		try {
-			classPathResource = new ClassPathResource("META-INF/file/"+fileName+".wav");
-			inputStream = classPathResource.getInputStream();
-			file = new File("META-INF/file/"+fileName+"_play.wav");
-			FileUtils.copyInputStreamToFile(inputStream, file);
+//			classPathResource = new ClassPathResource("META-INF/file/"+fileName+".wav");
+//			inputStream = classPathResource.getInputStream();
+			file = new File(fileName+".wav");
+//			FileUtils.copyInputStreamToFile(inputStream, file);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -80,12 +78,12 @@ public class GPIOService {
 		// TODO Auto-generated method stub
 		for(int i=0; i<5; i++){
             for (int j = 0; j < 2; j++) {
-            		log.info(j);
+            		//log.info(j);
                     SoftPwm.softPwmWrite(pinNum, 100);
                     Thread.sleep(100);
             }
             for (int j = 0; j < 2; j++){
-            		log.info(j);
+            		//log.info(j);
                     SoftPwm.softPwmWrite(pinNum, 90);
                     Thread.sleep(100);
             }
@@ -129,7 +127,5 @@ public class GPIOService {
 		catch(Exception e){
 			e.printStackTrace();
 		}
-		
 	}
-	
 }
