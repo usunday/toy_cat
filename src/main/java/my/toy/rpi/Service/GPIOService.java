@@ -11,7 +11,6 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
