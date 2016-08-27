@@ -1,8 +1,12 @@
 package my.toy.rpi.Service;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +16,8 @@ import com.pi4j.wiringpi.SoftPwm;
 @Service
 public class GPIOService {
 	Logger log = Logger.getLogger(GPIOService.class);
+	// 재생할 파일이름과 확장자
+	private final String FILE_NAME = "Beat.wav";
 	
 	public void init(int pinCnt) throws InterruptedException {
 		// initialize wiringPi library
@@ -64,6 +70,21 @@ public class GPIOService {
 	public String printAsync(){
 		return "Async";
 		
+	} 
+	
+	/**
+	 * 웨이브 파일 얻기
+	 * @return
+	 */
+	public File getWaveFile(String fileName){
+		ClassLoader classLoader = getClass().getClassLoader();
+		File file = null;
+		try {
+			file = new File(classLoader.getResource("META-INF/file/"+fileName+".wav").getFile());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return file;
 	}
 	
 	@Async
@@ -101,4 +122,24 @@ public class GPIOService {
 		
 		return ipadresses;
 	}
+
+	/**
+	 * 웨이브 파일 재생
+	 * @param file 재생할 파일
+	 */
+	@Async
+	public void wavePlay(File file) {
+		try{
+			Clip clip = AudioSystem.getClip();
+			clip.open(AudioSystem.getAudioInputStream(file));
+			clip.start();
+		
+			Thread.sleep(clip.getMicrosecondLength()/1000);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		
+	}
+	
 }

@@ -2,6 +2,8 @@ package my.toy.rpi.Controller;
 
 import my.toy.rpi.Service.GPIOService;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,10 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.pi4j.io.gpio.GpioFactory;
-import com.pi4j.io.gpio.GpioPinDigitalOutput;
-import com.pi4j.io.gpio.PinState;
-import com.pi4j.io.gpio.RaspiPin;
+
 
 //import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -133,4 +132,25 @@ public class GPIOController {
 //			gpio.shutdown();
 //		}
 	}
+	
+
+	/**
+	 * 웨이브 파일 재생 기능.
+	 */
+	@RequestMapping(value="/wavePlay/{fileName}")
+	public void wavePlay(@PathVariable(value="fileName") String fileName){
+		log.info("wavePlay");
+		try {
+			File file = gpioservice.getWaveFile(fileName);
+			log.info("[wave file]  : " + file);
+			if(file != null){
+				// 웨이브 파일 재생
+				gpioservice.wavePlay(file);
+				log.info("재생종료");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
