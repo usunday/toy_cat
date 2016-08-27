@@ -27,6 +27,7 @@ public class GPIOService {
         	SoftPwm.softPwmCreate(i, 0, 100);
         }
 	}
+	
 	@Async
 	public void pinUp(int num) throws InterruptedException {
 		// TODO Auto-generated method stub
@@ -72,17 +73,19 @@ public class GPIOService {
 		// TODO Auto-generated method stub
 		for(int i=0; i<5; i++){
             for (int j = 0; j < 2; j++) {
+            		log.info(j);
                     SoftPwm.softPwmWrite(pinNum, 100);
                     Thread.sleep(100);
             }
             for (int j = 0; j < 2; j++){
+            		log.info(j);
                     SoftPwm.softPwmWrite(pinNum, 90);
                     Thread.sleep(100);
             }
 	    }
 	    for (int j = 0; j < 3; j++) {
-	                    SoftPwm.softPwmWrite(pinNum, 100);
-	                    Thread.sleep(100);
+	    	SoftPwm.softPwmWrite(pinNum, 100);
+	    	Thread.sleep(100);
 	    }
 		log.info("toggle service finish");
 	}
