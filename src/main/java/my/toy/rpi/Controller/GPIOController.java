@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.RaspiPin;
+
 //import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -79,5 +84,52 @@ public class GPIOController {
 		log.info("Async");
 		gpioservice.printAsync();
 		return "Async";
+	}
+	
+	/**
+	 * LED 점멸 기능.
+	 * @param pinNum 핀번호 (29부터 하나씩 줄어듬)
+	 */
+	@RequestMapping(value="/ledToggle/{pinNum}")
+	public void ledToggle(@PathVariable(value="pinNum") String pinNum){
+		
+		final com.pi4j.io.gpio.GpioController gpio = GpioFactory.getInstance();
+		final int toggleCnt = 20;	// 점멸 횟수.
+		GpioPinDigitalOutput led = null;
+		
+		try {
+			switch (pinNum) {
+			case "29":
+				led = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_29, "pin29", PinState.LOW);
+				break;
+			case "28":
+				led = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_28, "pin28", PinState.LOW);
+				break;
+			case "27":
+				led = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_27, "pin27", PinState.LOW);
+				break;
+			case "26":
+				led = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_26, "pin26", PinState.LOW);
+				break;
+			case "25":
+				led = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_25, "pin25", PinState.LOW);
+				break;
+			default:
+				break;
+			}
+			
+			if(null != led){
+				for (int i = 0; i <toggleCnt; i++) {
+					led.toggle();
+					Thread.sleep(500);
+				}
+			}
+		} catch (Exception e) {
+			e.getMessage();
+		} finally {
+			led.low();
+			led = null;
+			gpio.shutdown();
+		}
 	}
 }
