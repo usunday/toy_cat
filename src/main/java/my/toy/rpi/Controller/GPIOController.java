@@ -58,12 +58,23 @@ public class GPIOController {
 		log.info("direction:"+ direction );
 		
 		try {
-			if(direction.equals("UP"))
+			if(direction.equals("UP")){
 				gpioservice.pinUp(num);
-			else if(direction.equals("DOWN"))
+				
+				File file = gpioservice.getWaveFile(Integer.toString(num));
+				log.info("file: " + file);
+				if(file != null){
+					log.info("play start");
+					// 웨이브 파일 재생
+					gpioservice.wavePlay(file);
+					log.info("play end");
+				}
+			
+			}else if(direction.equals("DOWN")){
 				gpioservice.pinDown(num);
-			else
+			}else{
 				log.error("wrong diretion");
+			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
