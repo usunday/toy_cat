@@ -2,11 +2,16 @@ package my.toy.rpi.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +32,6 @@ public class GPIOService {
         	SoftPwm.softPwmCreate(i, 0, 100);
         }
 	}
-	
 	@Async
 	public void pinUp(int num) throws InterruptedException {
 		// TODO Auto-generated method stub
@@ -58,10 +62,14 @@ public class GPIOService {
 	 * @return
 	 */
 	public File getWaveFile(String fileName){
-		ClassLoader classLoader = getClass().getClassLoader();
+		ClassPathResource classPathResource = null;
 		File file = null;
+		InputStream inputStream = null;
 		try {
-			file = new File(classLoader.getResource("META-INF/file/"+fileName+".wav").getFile());
+			classPathResource = new ClassPathResource("META-INF/file/"+fileName+".wav");
+			inputStream = classPathResource.getInputStream();
+			file = new File("META-INF/file/"+fileName+"_play.wav");
+			FileUtils.copyInputStreamToFile(inputStream, file);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -73,19 +81,17 @@ public class GPIOService {
 		// TODO Auto-generated method stub
 		for(int i=0; i<5; i++){
             for (int j = 0; j < 2; j++) {
-            		log.info(j);
                     SoftPwm.softPwmWrite(pinNum, 100);
                     Thread.sleep(100);
             }
             for (int j = 0; j < 2; j++){
-            		log.info(j);
                     SoftPwm.softPwmWrite(pinNum, 90);
                     Thread.sleep(100);
             }
 	    }
 	    for (int j = 0; j < 3; j++) {
-	    	SoftPwm.softPwmWrite(pinNum, 100);
-	    	Thread.sleep(100);
+	                    SoftPwm.softPwmWrite(pinNum, 100);
+	                    Thread.sleep(100);
 	    }
 		log.info("toggle service finish");
 	}
