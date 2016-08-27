@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: my.toy.rpi.CatToyApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.396 sec - in my.toy.rpi.CatToyApplicationTests
